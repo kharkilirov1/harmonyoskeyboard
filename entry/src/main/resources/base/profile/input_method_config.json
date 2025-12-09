@@ -1,0 +1,4 @@
+{
+  "label": "$string:input_method_name",
+  "icon": "$media:app_icon"
+}

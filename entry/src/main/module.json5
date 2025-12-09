@@ -1,0 +1,29 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "InputMethodExtensionAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "extensionAbilities": [
+      {
+        "name": "InputMethodExtensionAbility",
+        "srcEntry": "./ets/InputMethodExtensionAbility.ets",
+        "type": "inputMethod",
+        "exported": true,
+        "metadata": [
+          {
+            "name": "ohos.extension.input_method",
+            "resource": "$profile:input_method_config"
+          }
+        ]
+      }
+    ]
+  }
+}

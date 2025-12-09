@@ -1,0 +1,9 @@
+{
+  "name": "harmonyoskeyboard",
+  "version": "1.0.0",
+  "description": "Russian keyboard with word suggestions for HarmonyOS 6",
+  "main": "",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}

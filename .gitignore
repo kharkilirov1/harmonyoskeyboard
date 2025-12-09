@@ -1,0 +1,28 @@
+# HarmonyOS / DevEco Studio
+.idea/
+.hvigor/
+build/
+node_modules/
+oh_modules/
+local.properties
+*.hap
+*.app
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Build outputs
+/entry/build/
+/AppScope/build/
+/.preview/
