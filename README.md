@@ -67,8 +67,8 @@ harmonyoskeyboard/
 
 ## Требования
 
-- **HarmonyOS SDK**: API 21 (HarmonyOS 6.0.1)
-- **DevEco Studio**: последняя версия
+- **HarmonyOS SDK**: API 20 (HarmonyOS 6.0)
+- **DevEco Studio**: 6.0 или выше
 - **Устройство**: HarmonyOS 6.0+
 
 ## Сборка и установка
@@ -87,7 +87,7 @@ cd harmonyoskeyboard
 
 1. Откройте DevEco Studio
 2. File → Project Structure
-3. Убедитесь, что выбран HarmonyOS SDK API 21
+3. Убедитесь, что выбран HarmonyOS SDK API 20
 
 ### 3. Собрать проект
 
