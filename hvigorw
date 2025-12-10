@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# ----------------------------------------------------------------------------
+# Hvigor startup script for UN*X
+# ----------------------------------------------------------------------------
+
+# Determine hvigor home
+HVIGOR_APP_HOME=$(cd "$(dirname "$0")" && pwd)
+export HVIGOR_APP_HOME
+
+# Read configuration from .hvigorw file
+HVIGOR_VERSION=$(grep "hvigorVersion" "$HVIGOR_APP_HOME/.hvigorw" | sed 's/.*: *"\(.*\)".*/\1/')
+
+# Get node from environment
+if [ -z "$NODE_PATH" ]; then
+    NODE_PATH="node"
+fi
+
+# Execute hvigor
+exec "$NODE_PATH" "$HVIGOR_APP_HOME/hvigor/hvigor-wrapper.js" "$@"
