@@ -1,4 +1,4 @@
-import { KeyboardController } from '../model/KeyboardController';
+import { KeyboardController, ShiftState } from '../model/KeyboardController';
 import { Key } from '../model/KeyboardLayout';
 import { KeyButton } from './KeyButton';
 import { SuggestionBar } from './SuggestionBar';
@@ -10,7 +10,7 @@ import { SuggestionBar } from './SuggestionBar';
 export struct KeyboardView {
   @State controller: KeyboardController = new KeyboardController();
   @State suggestions: string[] = [];
-  @State isShift: boolean = false;
+  @State shiftState: ShiftState = ShiftState.Off;
 
   build() {
     Column() {
@@ -33,7 +33,7 @@ export struct KeyboardView {
             ForEach(row, (key: Key, keyIndex: number) => {
               KeyButton({
                 key: key,
-                isShift: this.isShift,
+                shiftState: this.shiftState,
                 onKeyPress: (pressedKey: Key) => {
                   this.handleKeyPress(pressedKey);
                 }
@@ -61,7 +61,7 @@ export struct KeyboardView {
     await this.controller.handleKeyPress(key);
 
     // Обновляем состояние shift
-    this.isShift = this.controller.isShift();
+    this.shiftState = this.controller.getShiftState();
 
     // Обновляем предложения
     this.updateSuggestions();

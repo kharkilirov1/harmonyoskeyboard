@@ -3,13 +3,22 @@ import { SuggestionEngine } from './SuggestionEngine';
 import { Layout, RussianLayout, EnglishLayout, NumberLayout, Key } from './KeyboardLayout';
 
 /**
+ * Состояние Shift
+ */
+export enum ShiftState {
+  Off = 'off',
+  OneShot = 'oneshot',
+  CapsLock = 'capslock'
+}
+
+/**
  * Контроллер клавиатуры
  */
 export class KeyboardController {
   private textInputClient: inputMethodEngine.InputClient | null = null;
   private suggestionEngine: SuggestionEngine;
   private currentLayout: Layout;
-  private isShiftActive: boolean = false;
+  private shiftState: ShiftState = ShiftState.Off;
   private currentText: string = '';
   private currentLanguage: 'russian' | 'english' = 'russian';
 
@@ -43,7 +52,7 @@ export class KeyboardController {
       this.currentLanguage = 'russian';
       this.currentLayout = RussianLayout;
     }
-    this.isShiftActive = false;
+    this.shiftState = ShiftState.Off;
   }
 
   /**
@@ -75,7 +84,7 @@ export class KeyboardController {
     try {
       switch (key.type) {
         case 'shift':
-          this.isShiftActive = !this.isShiftActive;
+          this.toggleShift();
           break;
 
         case 'backspace':
@@ -112,17 +121,39 @@ export class KeyboardController {
   }
 
   /**
+   * Переключить состояние Shift (Off → OneShot → CapsLock → Off)
+   */
+  private toggleShift(): void {
+    switch (this.shiftState) {
+      case ShiftState.Off:
+        this.shiftState = ShiftState.OneShot;
+        break;
+      case ShiftState.OneShot:
+        this.shiftState = ShiftState.CapsLock;
+        break;
+      case ShiftState.CapsLock:
+        this.shiftState = ShiftState.Off;
+        break;
+    }
+  }
+
+  /**
    * Обработка нажатия буквенной клавиши
    */
   private async handleLetterPress(key: Key): Promise<void> {
     let char = key.value;
 
-    if (this.isShiftActive && key.shift) {
+    // Применяем shift/capslock
+    if ((this.shiftState === ShiftState.OneShot || this.shiftState === ShiftState.CapsLock) && key.shift) {
       char = key.shift;
-      this.isShiftActive = false; // Отключаем shift после ввода одной буквы
     }
 
     await this.insertText(char);
+
+    // Сбрасываем OneShot после ввода буквы (CapsLock остаётся)
+    if (this.shiftState === ShiftState.OneShot) {
+      this.shiftState = ShiftState.Off;
+    }
 
     // Обновляем предложения, если это буква
     if (key.type === 'letter' || !key.type) {
@@ -207,10 +238,10 @@ export class KeyboardController {
   }
 
   /**
-   * Проверить, активен ли Shift
+   * Получить текущее состояние Shift
    */
-  isShift(): boolean {
-    return this.isShiftActive;
+  getShiftState(): ShiftState {
+    return this.shiftState;
   }
 
   /**

@@ -1,4 +1,5 @@
 import { Key } from '../model/KeyboardLayout';
+import { ShiftState } from '../model/KeyboardController';
 
 /**
  * Компонент кнопки клавиатуры
@@ -6,7 +7,7 @@ import { Key } from '../model/KeyboardLayout';
 @Component
 export struct KeyButton {
   @Prop key: Key;
-  @Prop isShift: boolean = false;
+  @Prop shiftState: ShiftState = ShiftState.Off;
   onKeyPress: (key: Key) => void = () => {};
 
   build() {
@@ -26,7 +27,7 @@ export struct KeyButton {
    * Получить отображаемый текст клавиши
    */
   private getKeyLabel(): string {
-    if (this.isShift && this.key.shift) {
+    if ((this.shiftState === ShiftState.OneShot || this.shiftState === ShiftState.CapsLock) && this.key.shift) {
       return this.key.shift;
     }
     return this.key.label;
@@ -47,9 +48,16 @@ export struct KeyButton {
   private getKeyBackgroundColor(): string {
     switch (this.key.type) {
       case 'shift':
+        // OneShot: синий, CapsLock: тёмно-синий
+        if (this.shiftState === ShiftState.CapsLock) {
+          return '#1E40AF'; // Тёмно-синий для CapsLock
+        } else if (this.shiftState === ShiftState.OneShot) {
+          return '#5B8FF9'; // Синий для OneShot
+        }
+        return '#E8E8E8'; // Серый для Off
       case 'backspace':
       case 'enter':
-        return this.isShift ? '#5B8FF9' : '#E8E8E8';
+        return '#E8E8E8';
       case 'switch':
         return '#D8D8D8';
       case 'space':
@@ -65,9 +73,13 @@ export struct KeyButton {
   private getKeyFontColor(): string {
     switch (this.key.type) {
       case 'shift':
+        // Белый текст для OneShot и CapsLock
+        return (this.shiftState === ShiftState.OneShot || this.shiftState === ShiftState.CapsLock)
+          ? '#FFFFFF'
+          : '#000000';
       case 'backspace':
       case 'enter':
-        return this.isShift ? '#FFFFFF' : '#000000';
+        return '#000000';
       default:
         return '#000000';
     }
