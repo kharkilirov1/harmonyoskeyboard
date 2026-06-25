@@ -26,3 +26,7 @@ Thumbs.db
 /entry/build/
 /AppScope/build/
 /.preview/
+
+# Python research artifacts
+research/**/__pycache__/
+*.pyc
